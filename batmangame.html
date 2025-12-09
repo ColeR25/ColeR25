@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Batman Trivia Game</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #0b0b0b;
+      color: #f5f5f5;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+    .game-box {
+      background: #111;
+      padding: 20px 30px;
+      border-radius: 12px;
+      width: 450px;
+      text-align: center;
+      box-shadow: 0 0 20px rgba(0,0,0,0.6);
+    }
+    button {
+      background: #ffeb3b;
+      border: none;
+      padding: 12px 20px;
+      margin-top: 15px;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+    button:hover {
+      background: #fdd835;
+    }
+    .options {
+      margin-top: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .option-btn {
+      background: #222;
+      color: white;
+      border: 1px solid #444;
+      padding: 10px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+    .option-btn:hover {
+      background: #333;
+    }
+    #timer {
+      font-size: 18px;
+      margin-bottom: 10px;
+      color: #ffeb3b;
+    }
+    #menu {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="game-box">
+    <h1>Batman Trivia</h1>
+
+    <div id="menu">
+      <button onclick="startGame()">Start Game</button>
+      <button onclick="showInstructions()">Instructions</button>
+    </div>
+
+    <p id="instructions" style="display:none;">
+      Answer each question before the timer runs out! You have 10 seconds per question.
+    </p>
+
+    <p id="timer"></p>
+    <p id="question" style="display:none;"></p>
+    <div class="options" id="options"></div>
+    <p id="scoreText"></p>
+  </div>
+
+  <audio id="correctSound" src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_0b3f31b52b.mp3?filename=correct-2-46134.mp3"></audio>
+  <audio id="wrongSound" src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_8cc0633d5c.mp3?filename=wrong-2-46134.mp3"></audio>
+
+  <script>
+    const questions = [
+      { q: "What is Batman's real name?", options: ["Bruce Wayne", "Clark Kent", "Tony Stark", "Peter Parker"], answer: 0 },
+      { q: "What city does Batman protect?", options: ["Metropolis", "Gotham City", "Central City", "Star City"], answer: 1 },
+      { q: "Who is Batman's iconic sidekick?", options: ["Alfred", "Robin", "Nightwing", "Batgirl"], answer: 1 },
+      { q: "What is the name of Batman's butler?", options: ["Jeeves", "Alfred Pennyworth", "Winston", "James"], answer: 1 },
+      { q: "What is Batman’s car called?", options: ["Dark Cruiser", "Night Rider", "Batmobile", "Shadow Car"], answer: 2 },
+      { q: "Which villain is known as the Clown Prince of Crime?", options: ["Riddler", "Penguin", "Joker", "Two-Face"], answer: 2 },
+      { q: "Who broke Batman’s back in the comics?", options: ["Bane", "Joker", "Deathstroke", "Killer Croc"], answer: 0 },
+      { q: "What is the name of Batman’s cave?", options: ["Hero Cave", "Knight Lair", "Batcave", "Wayne Bunker"], answer: 2 },
+      { q: "Who created Batman?", options: ["Stan Lee", "Bob Kane & Bill Finger", "Frank Miller", "Jack Kirby"], answer: 1 },
+      { q: "What is Batman’s rule about killing?", options: ["He kills villains", "Only kills if necessary", "He never kills", "He lets Robin decide"], answer: 2 },
+      { q: "Which villain uses riddles?", options: ["Scarecrow", "Riddler", "Joker", "Bane"], answer: 1 },
+      { q: "What is the name of Bruce Wayne’s mansion?", options: ["Wayne Manor", "Gotham House", "Knight Estate", "Bat Estate"], answer: 0 },
+      { q: "Which Batman villain is a former district attorney?", options: ["Scarecrow", "Two-Face", "Penguin", "Man-Bat"], answer: 1 },
+      { q: "What is Batman’s main gadget?", options: ["Laser Gun", "Batarang", "Grapple Stick", "Shadow Knife"], answer: 1 },
+      { q: "Who is the police commissioner who works with Batman?", options: ["Harvey Dent", "Lois Lane", "Jim Gordon", "Lex Luthor"], answer: 2 }
+    ];
+
+    let index = 0;
+    let score = 0;
+    let timer;
+    let timeLeft = 10;
+
+    const questionText = document.getElementById('question');
+    const optionsBox = document.getElementById('options');
+    const scoreText = document.getElementById('scoreText');
+    const timerText = document.getElementById('timer');
+    const menu = document.getElementById('menu');
+    const instructions = document.getElementById('instructions');
+
+    const correctSound = document.getElementById('correctSound');
+    const wrongSound = document.getElementById('wrongSound');
+
+    function startGame() {
+      menu.style.display = "none";
+      instructions.style.display = "none";
+      questionText.style.display = "block";
+      score = 0;
+      index = 0;
+      scoreText.textContent = "";
+      loadQuestion();
+    }
+
+    function showInstructions() {
+      instructions.style.display = instructions.style.display === "none" ? "block" : "none";
+    }
+
+    function loadQuestion() {
+      const current = questions[index];
+      questionText.textContent = current.q;
+      optionsBox.innerHTML = "";
+
+      current.options.forEach((opt, i) => {
+        const btn = document.createElement('button');
+        btn.textContent = opt;
+        btn.className = "option-btn";
+        btn.onclick = () => checkAnswer(i);
+        optionsBox.appendChild(btn);
+      });
+
+      startTimer();
+    }
+
+    function startTimer() {
+      timeLeft = 10;
+      timerText.textContent = `Time: ${timeLeft}`;
+
+      timer = setInterval(() => {
+        timeLeft--;
+        timerText.textContent = `Time: ${timeLeft}`;
+
+        if (timeLeft <= 0) {
+          clearInterval(timer);
+          wrongSound.play();
+          index++;
+          if (index < questions.length) loadQuestion();
+          else endGame();
+        }
+      }, 1000);
+    }
+
+    function checkAnswer(choice) {
+      clearInterval(timer);
+
+      if (choice === questions[index].answer) {
+        score++;
+        correctSound.play();
+      } else wrongSound.play();
+
+      index++;
+      if (index < questions.length) loadQuestion();
+      else endGame();
+    }
+
+    function endGame() {
+      questionText.textContent = "Game Over!";
+      optionsBox.innerHTML = "";
+      timerText.textContent = "";
+      scoreText.textContent = `Your Score: ${score}/${questions.length}`;
+
+      const restartBtn = document.createElement('button');
+      restartBtn.textContent = "Play Again";
+      restartBtn.onclick = startGame;
+      optionsBox.appendChild(restartBtn);
+
+      menu.style.display = "flex";
+    }
+  </script>
+</body>
+</html>

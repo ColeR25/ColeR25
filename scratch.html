@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Batman Scratch Page</title>
+
+    <link rel="stylesheet" href="css/scratch-style.css"/>
+
+    <style>
+        html { scroll-behavior: smooth; }
+    </style>
+</head>
+
+<body>
+
+<h1>Batman</h1>
+<h2>The Dark Knight</h2>
+
+<!-- Button to Batman Game -->
+<div class="button-container box-section">
+    <a href="batmangame.html">
+        <button type="button">Go to Batman's Game</button>
+    </a>
+</div>
+
+<!-- TOP NAVIGATION -->
+<nav class="box-section nav-section">
+    <a href="index.html">
+        <button class="nav-button">Back to Home Page</button>
+    </a>
+</nav>
+
+<!-- Jump Link -->
+<div class="jump-link box-section">
+    <a href="#video">
+        <button class="jump-button">Jump to The Dark Knight Video</button>
+    </a>
+</div>
+
+<!-- IMAGE SECTION -->
+<div class="image-section box-section">
+    <h2>What I look like</h2>
+    <img src="assets/img/Batman.jpg" alt="Batman" class="Batman">
+</div>
+
+<!-- ORDERED LIST SECTION -->
+<div class="list-section box-section">
+    <h2>Batman Facts</h2>
+    <div class="list-wrapper">
+        <ol>
+            <li>Bruce Wayne's Skills:
+                <ul>
+                    <li>Martial Arts Expert</li>
+                    <li>Master Detective</li>
+                    <li>Genius-Level Intellect</li>
+                </ul>
+            </li>
+            <li>The Batcave is hidden under Wayne Manor.</li>
+            <li>Batman has a strict no-kill rule.</li>
+        </ol>
+    </div>
+</div>
+
+<section class="box-section">
+    <h2>My best advice to you</h2>
+    <ol>
+        <li>
+            "Bruce, deep down you may still be that same great kid you used to be, 
+            but it's not who you are underneath... it's what you do that defines you."
+            – Rachel Dawes
+        </li>
+        <li>
+            "Why do we fall, sir? So that we can learn to pick ourselves up."
+            <br>– Alfred Pennyworth
+        </li>
+        <li>
+            "The training is nothing. The will is everything. The will to act."
+            <br>– Henri Ducard
+        </li>
+        <li>
+            "You always fear what you don't understand."
+            <br>– Carmine Falcone
+        </li>
+        <li>
+            "You either die a hero or live long enough to see yourself become the villain."
+            – Harvey Dent
+        </li>
+    </ol>
+</section>
+
+<!-- VIDEO SECTION -->
+<div class="video-section box-section" id="video">
+    <h2>The Dark Knight Trailer</h2>
+    <iframe width="560" height="315" 
+        src="https://www.youtube.com/embed/EXeTwQWrcwY" 
+        title="YouTube video player" 
+        frameborder="0" 
+        allowfullscreen>
+    </iframe>
+</div>
+
+<!-- TABLEAU -->
+<div class="tableau-container box-section" id="tableau">
+    <h2>Batman Tableau</h2>
+
+    <div class='tableauPlaceholder' id='viz1765303570440' style='position: relative'>
+        <noscript><a href='#'>
+            <img alt='Data Viz' src='https://public.tableau.com/static/images/Th/TheFacesofBatman/DataViz/1_rss.png' />
+        </a></noscript>
+        <object class='tableauViz' style='display:none;'>
+            <param name='host_url' value='https%3A%2F%2Fpublic.tableau.com%2F' /> 
+            <param name='embed_code_version' value='3' /> 
+            <param name='site_root' value='' />
+            <param name='name' value='TheFacesofBatman/DataViz' />
+            <param name='tabs' value='no' />
+            <param name='toolbar' value='yes' />
+            <param name='animate_transition' value='yes' />
+        </object>
+    </div>
+
+    <script type='text/javascript'>
+        var divElement = document.getElementById('viz1765303570440');
+        var vizElement = divElement.getElementsByTagName('object')[0];
+        vizElement.style.width = '1200px';
+        vizElement.style.height = '850px';
+        var scriptElement = document.createElement('script');
+        scriptElement.src = 'https://public.tableau.com/javascripts/api/viz_v1.js';
+        vizElement.parentNode.insertBefore(scriptElement, vizElement);
+    </script>
+</div>
+
+</body>
+</html>
